@@ -9,12 +9,16 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 
 	"cloud.google.com/go/compute/metadata"
 	"cloud.google.com/go/datastore"
 )
 
 var log = newStdLogger()
+var client = http.Client{
+	Timeout: 3 * time.Second,
+}
 
 func main() {
 	s, err := newServer(func(s *server) error {

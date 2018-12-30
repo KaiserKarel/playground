@@ -1,3 +1,7 @@
+# fork
+This is a fork of the official Go playground, with added support for passing a url with text as a parameter to occupy the code. (i.e. point to  github gist).
+
+
 # playground
 
 This subrepository holds the source for the Go playground:

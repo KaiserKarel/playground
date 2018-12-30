@@ -90,6 +90,7 @@ ENV REV=f0a1202acdc5c4702be05098d5ff8e9b3b444442
 RUN go get -d google.golang.org/grpc `#and 24 other pkgs` &&\
     (cd /go/src/google.golang.org/grpc && (git cat-file -t $REV 2>/dev/null || git fetch -q origin $REV) && git reset --hard $REV)
 
+RUN go get github.com/pkg/errors
 # Optimization to speed up iterative development, not necessary for correctness:
 RUN go install cloud.google.com/go/compute/metadata \
 	cloud.google.com/go/datastore \

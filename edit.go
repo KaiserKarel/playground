@@ -38,7 +38,22 @@ func (s *server) handleEdit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	snip := &snippet{Body: []byte(hello)}
+	// Handling queryparams to alter the default
+	var prefill = hello
+	u, err := getURL(r)
+	if err != nil {
+		log.Printf("error getting url: %s", err.Error())
+	} else {
+		log.Printf("getting prefill from url parameters: %s", u)
+		code, err := get(u)
+		if err != nil {
+			log.Printf("error getting prefill: %s", err.Error())
+		} else {
+			prefill = string(code)
+		}
+	}
+
+	snip := &snippet{Body: []byte(prefill)}
 	if strings.HasPrefix(r.URL.Path, "/p/") {
 		if !allowShare(r) {
 			w.WriteHeader(http.StatusUnavailableForLegalReasons)
@@ -85,6 +100,19 @@ func (s *server) handleEdit(w http.ResponseWriter, r *http.Request) {
 
 const hello = `package main
 
+import (
+	"fmt"
+)
+
+func main() {
+	fmt.Println("Hello, playground")
+}
+`
+
+var badparam = `package main
+
+// The parameter provided in the form could not be obtained, so this is a default.
+// You provided us with: %s
 import (
 	"fmt"
 )
